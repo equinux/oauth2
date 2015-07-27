@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/equinux/oauth2/internal"
 	"golang.org/x/net/context"
-	"golang.org/x/oauth2/internal"
 )
 
 // expiryDelta determines how earlier a token should be considered
@@ -39,6 +39,9 @@ type Token struct {
 	// (as opposed to the user) to refresh the access token
 	// if it expires.
 	RefreshToken string `json:"refresh_token,omitempty"`
+
+	// IdToken is a token used for OpenID Connect
+	IDToken string `json:"id_token,omitempty"`
 
 	// Expiry is the optional expiration time of the access token.
 	//
@@ -127,6 +130,7 @@ func tokenFromInternal(t *internal.Token) *Token {
 		TokenType:    t.TokenType,
 		RefreshToken: t.RefreshToken,
 		Expiry:       t.Expiry,
+		IDToken:      t.IDToken,
 		raw:          t.Raw,
 	}
 }

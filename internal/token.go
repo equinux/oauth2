@@ -41,6 +41,9 @@ type Token struct {
 	// if it expires.
 	RefreshToken string
 
+	// IDToken is a token used for OpenID Connect
+	IDToken string
+
 	// Expiry is the optional expiration time of the access token.
 	//
 	// If zero, TokenSource implementations will reuse the same
@@ -59,6 +62,7 @@ type tokenJSON struct {
 	AccessToken  string         `json:"access_token"`
 	TokenType    string         `json:"token_type"`
 	RefreshToken string         `json:"refresh_token"`
+	IDToken      string         `json:"id_token"`
 	ExpiresIn    expirationTime `json:"expires_in"` // at least PayPal returns string, while most return number
 	Expires      expirationTime `json:"expires"`    // broken Facebook spelling of expires_in
 }
@@ -178,6 +182,7 @@ func RetrieveToken(ctx context.Context, ClientID, ClientSecret, TokenURL string,
 			AccessToken:  vals.Get("access_token"),
 			TokenType:    vals.Get("token_type"),
 			RefreshToken: vals.Get("refresh_token"),
+			IDToken:      vals.Get("id_token"),
 			Raw:          vals,
 		}
 		e := vals.Get("expires_in")
@@ -200,6 +205,7 @@ func RetrieveToken(ctx context.Context, ClientID, ClientSecret, TokenURL string,
 			AccessToken:  tj.AccessToken,
 			TokenType:    tj.TokenType,
 			RefreshToken: tj.RefreshToken,
+			IDToken:      tj.IDToken,
 			Expiry:       tj.expiry(),
 			Raw:          make(map[string]interface{}),
 		}
